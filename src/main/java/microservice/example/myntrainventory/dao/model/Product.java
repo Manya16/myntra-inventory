@@ -27,7 +27,7 @@ public class Product implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "brand",referencedColumnName = "name")
-    private  Brand brand;
+    private Brand brand;
 
     @Column(name = "gender")
     private String gender;

@@ -32,24 +32,21 @@ public class ProductServiceImpl implements ProductService {
     Product product = ProductMapper.MAPPER.toModel(request);
 
     Category category = categoryDao.findByIdAndActive(request.getCategoryId(), true);
-    if (category == null) {
-      throw new MyntraException("Category not found");
-    }
+    if (category == null) throw new MyntraException("Category not found", "1000");
+
     product.setCategory(category);
 
     Brand brand = brandDao.findByIdAndActive(request.getBrandId(), true);
-    if (brand == null) {
-      throw new MyntraException("Brand not found");
-    }
+    if (brand == null) throw new MyntraException("Brand not found", "1001");
+
     product.setBrand(brand);
 
     Integer maxId = productDao.findMaxId();
     product.setItemCode(MyntraUtils.getItemCode(maxId + 1));
 
     Gender gender = Gender.search(product.getGender());
-    if (gender == null) {
-      throw new MyntraException("Gender not present", "0001");
-    }
+    if (gender == null) throw new MyntraException("Gender not present", "1002");
+
 
     product = productDao.save(product);
     return ProductMapper.MAPPER.toVo(product);
@@ -73,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
     } else if (categories == null && brands == null && gender != null) {
       products = productDao.fetchByGender(gender);
     } else if (categories == null && brands != null && gender != null) {
-      products = productDao.findByBrandsAndGender(brands,gender);
+      products = productDao.fetchByBrandsAndGender(brands,gender);
     } else {
       products = (List<Product>) productDao.findAll();
     }

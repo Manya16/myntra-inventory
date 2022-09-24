@@ -33,7 +33,7 @@ public interface ProductDao extends CrudRepository<Product,Integer> {
     List<Product> findByGender(String gender);
 
 
-    //List<Product> findByBrandAndGender(Brand brand, String gender);
+    List<Product> findByBrandAndGender(Brand brand, String gender);
 
     @Query("select prd from Product prd where prd.category.name=?1 and prd.brand.name=?2 and prd.gender=?3")
     List<Product> fetchAllByCategoryAndBrandAndGender(String category, List<String> brand, String gender);
@@ -42,20 +42,20 @@ public interface ProductDao extends CrudRepository<Product,Integer> {
     List<Product> fetchAllByGenderAndCategoriesAndBrands(@Param("gender") String gender,@Param("categories") List<String> categories, @Param("brands") List<String> brands);
 
     @Query("select prd from Product prd where prd.category.name in (:categories) and prd.brand.name in (:brands)")
-    List<Product> fetchByCategoriesAndBrands(List<String> categories, List<String> brands);
+    List<Product> fetchByCategoriesAndBrands(@Param("categories") List<String> categories,@Param("brands") List<String> brands);
 
     @Query("select prd from Product prd where prd.category.name in (:categories) and prd.gender = :gender")
-    List<Product> fetchByCategoriesAndGender(List<String> categories, String gender);
+    List<Product> fetchByCategoriesAndGender(@Param("categories") List<String> categories,@Param("gender") String gender);
 
     @Query("select prd from Product prd where prd.category.name in (:categories)")
-    List<Product> fetchByCategories(List<String> categories);
+    List<Product> fetchByCategories(@Param("categories") List<String> categories);
 
     @Query("select prd from Product prd where prd.brand.name in (:brands)")
-    List<Product> fetchByBrands(List<String> brands);
+    List<Product> fetchByBrands(@Param("brands") List<String> brands);
 
     @Query("select prd from Product prd where prd.gender = :gender")
-    List<Product> fetchByGender(String gender);
+    List<Product> fetchByGender(@Param("gender") String gender);
 
-    @Query("select prd from product prd where prd.brand.name in(:brands) and prd.gender= :gender")
-    List<Product> findByBrandsAndGender(List<String> brands, String gender);
+    @Query("select prd from Product prd where prd.brand.name in (:brands) and prd.gender= :gender")
+    List<Product> fetchByBrandsAndGender(@Param("brands") List<String> brands,@Param("gender") String gender);
 }
