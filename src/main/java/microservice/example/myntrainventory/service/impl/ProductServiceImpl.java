@@ -8,6 +8,7 @@ import microservice.example.myntrainventory.dao.model.Brand;
 import microservice.example.myntrainventory.dao.model.Category;
 import microservice.example.myntrainventory.dao.model.Product;
 import microservice.example.myntrainventory.service.ProductService;
+import microservice.example.myntrainventory.service.cache.helper.ProductCacheHelper;
 import microservice.example.myntrainventory.service.common.MyntraUtils;
 import microservice.example.myntrainventory.service.enums.Gender;
 import microservice.example.myntrainventory.service.exception.MyntraException;
@@ -22,6 +23,8 @@ public class ProductServiceImpl implements ProductService {
 
   @Autowired
   ProductDao productDao;
+  @Autowired
+  private ProductCacheHelper productCacheHelper;
   @Autowired
   private CategoryDao categoryDao;
   @Autowired
@@ -77,5 +80,12 @@ public class ProductServiceImpl implements ProductService {
 
     List<ProductResponseVo> responseList = ProductMapper.MAPPER.toVoList(products);
     return responseList;
+  }
+
+  @Override
+  public ProductResponseVo getByItemCode(String itemCode) throws MyntraException {
+    Product product = productCacheHelper.getByItemCode(itemCode);
+    if(product == null) throw new MyntraException("Product not found", "0000");
+    return ProductMapper.MAPPER.toVo(product);
   }
 }

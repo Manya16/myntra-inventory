@@ -13,4 +13,6 @@ public interface ProductService {
 
   List<ProductResponseVo> get(List<String> categoryName, List<String> brandName, String gender)
       throws MyntraException;
+
+  ProductResponseVo getByItemCode(String itemCode) throws MyntraException;
 }
